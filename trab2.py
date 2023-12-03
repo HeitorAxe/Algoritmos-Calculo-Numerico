@@ -1,9 +1,9 @@
 import numpy as np
 
-def funcao_exemplo1(x):
+def func1(x):
     return np.exp(-x**2)
 
-def funcao_exemplo2(x):
+def func2(x):
     return np.log(x + np.sqrt(x + 1))
 
 def regra_trapezios(f, a, b, n):
@@ -29,7 +29,7 @@ def regra_simpson(f, a, b, n):
     integral_aproximada *= h / 3
     return integral_aproximada
 
-def calcular_integral_com_precisao(f, a, b, precisao):
+def calc_integral(f, a, b, precisao):
     n = 1
     integral_anterior = 0
     integral_atual_trapezios = regra_trapezios(f, a, b, n)
@@ -58,33 +58,34 @@ def gerar_tabela(f, a, b, n):
 a = 0
 b = 1
 
-# Calculando a integral para a primeira função: e^(-x^2)
-print("Resultados para a função e^(-x^2):")
+# função 1
+print("Resultados para a função 1:")
 precisao = 1e-3
-integral_trapezios, integral_simpson, particionamento = calcular_integral_com_precisao(funcao_exemplo1, a, b, precisao)
+integral_trapezios, integral_simpson, particionamento = calc_integral(func1, a, b, precisao)
 print(f"Integral (∫e^(-x^2)dx) usando a Regra dos Trapézios: {integral_trapezios}")
 print(f"Integral (∫e^(-x^2)dx) usando a Regra de Simpson: {integral_simpson}")
 
-# Gerando a tabela para a primeira função
-tabela1 = gerar_tabela(funcao_exemplo1, a, b, particionamento)
 
-# Calculando a integral para a segunda função: ln(x + √(x+1))
-print("\nResultados para a função ln(x + √(x+1)):")
-integral_trapezios, integral_simpson, particionamento = calcular_integral_com_precisao(funcao_exemplo2, a, b, precisao)
+tabela1 = gerar_tabela(func1, a, b, particionamento)
+
+# função2
+a = 1
+b = 2
+print("\nResultados para a função 2")
+integral_trapezios, integral_simpson, particionamento = calc_integral(func2, a, b, precisao)
 print(f"Integral (∫ln(x + √(x+1))dx) usando a Regra dos Trapézios: {integral_trapezios}")
 print(f"Integral (∫ln(x + √(x+1))dx) usando a Regra de Simpson: {integral_simpson}")
 
-# Gerando a tabela para a segunda função
-tabela2 = gerar_tabela(funcao_exemplo2, a, b, particionamento)
+tabela2 = gerar_tabela(func2, a, b, particionamento)
 
-# Apresentando a tabela para a primeira função
-print("\nTabela de Pontos para a função e^(-x^2) (xi, yi):")
+
+print("\nTabela de Pontos para a função 1")
 print("   x          y")
 for ponto in tabela1:
     print(f"{ponto[0]:.4f}   {ponto[1]:.4f}")
 
-# Apresentando a tabela para a segunda função
-print("\nTabela de Pontos para a função ln(x + √(x+1)) (xi, yi):")
+
+print("\nTabela de Pontos para a função 2")
 print("   x          y")
 for ponto in tabela2:
     print(f"{ponto[0]:.4f}   {ponto[1]:.4f}")
