@@ -7,7 +7,7 @@ from sklearn.linear_model import LinearRegression
 from sklearn.metrics import r2_score
 
 # Especificando o número de linhas a serem lidas
-num_linhas = 100 
+num_linhas = 50 
 
 # Lendo o arquivo CSV
 nome_arquivo = 'life.csv'  
@@ -20,7 +20,7 @@ Y = dados['GDP']
 X = dados['Life_expectancy']
 
 # Polynomial Regression
-degree = 4 
+degree = 3 
 poly_features = PolynomialFeatures(degree=degree)
 X_poly = poly_features.fit_transform(X.values.reshape(-1, 1))
 
