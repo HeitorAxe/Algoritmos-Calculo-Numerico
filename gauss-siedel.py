@@ -1,26 +1,16 @@
 import numpy as np
 
-def gauss_siedel(A, B, initial_guess, tol=1e-6, max_iter=100):
-    n = len(B)
-    x = initial_guess.copy()
-    
-    for iter_count in range(max_iter):
-        for i in range(n):
-            x[i] = (B[i] - np.dot(A[i, :i], x[:i]) - np.dot(A[i, i+1:], x[i+1:])) / A[i, i]
+def gauss(A, b, x, n):
+    L = np.tril(A)
+    U = A - L
+    for i in range(n):
+        x = np.dot(np.linalg.inv(L), b - np.dot(U, x))
+    print(f"A solução aproximada após {n} iterações é: {x}")
 
-        if np.linalg.norm(np.dot(A, x) - B) < tol:
-            return x
+A = np.array([[4.0, -2.0, 1.0], [1.0, -3.0, 2.0], [-1.0, 2.0, 6.0]]) #cada matriz é uma linha
+b = [1.0, 2.0, 3.0]
+x = [1, 1, 1] #CHUTE INICIAL
 
-    raise Exception("O método de Gauss-Siedel atingiu o número máximo de iterações.")
+n = 20 #número de iterações
 
-# Exemplo de uso:
-A = np.array([[10, 2, 1],
-              [1, 5, 1],
-              [2, 3, 10]])
-
-B = np.array([7, -8, 6])
-
-initial_guess = np.zeros(len(B))
-
-solutions = gauss_siedel(A, B, initial_guess)
-print("As soluções são:", solutions)
+gauss(A, b, x, n)

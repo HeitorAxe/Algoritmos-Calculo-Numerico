@@ -1,52 +1,77 @@
-import matplotlib.pyplot as plt
+# Python3 program to implement Runge
+# Kutta method
 import numpy as np
-def feval(funcName, *args):
-    return eval(funcName)(*args)
-def RK4Ordem(func, yinit, x_range, h):
-    m = len(yinit)
-    n = int((x_range[-1] - x_range[0])/h)
-    x = x_range[0]
-    y = yinit
-    xsol = np.empty(0)
-    xsol = np.append(xsol, x)
-    ysol = np.empty(0)
-    ysol = np.append(ysol, y)
-    for i in range(n):
-        k1 = h*feval(func, x, y)
-        k2 = h*feval(func, x+h/2, y + k1*(h/2))
-        k3 = h*feval(func, x+h/2, y + k2*(1/2))
-        k4 = h*feval(func, x+h, y + k3)
-        for j in range(m):
-            y[j] = y[j] + (1/6)*(k1[j] + 2*k2[j] + 2*k3[j] + k4[j])
-        x = x + h
-        xsol = np.append(xsol, x)
-        for r in range(len(y)):
-            ysol = np.append(ysol, y[r])
-    return [xsol, ysol]
-    2
-def myFunc(x, y):
-    dy = np.zeros((len(y)))
-    dy[0] = 4*x- 2*x*y
-    return dy
-# -----------------------h bem pequeno
+import matplotlib.pyplot as plt
+ 
+# A sample differential equation
+def f(x, y) :
+    return y/x - (y/x)**2
 
-h = 0.2
-x = np.array([0.0, 2.0])
-yinit = np.array([1.0])
-[ts, ys] = RK4Ordem('myFunc', yinit, x, h)
-dt = int((x[-1]-x[0])/h)
-t = [x[0]+i*h for i in range(dt+1)]
-yexact = []
-for i in range(dt+1):
-    ye = 2 - 1*np.exp(-t[i]*t[i])
-    yexact.append(ye)
-difere = ys - yexact
-print("Diferença máxima =", np.max(abs(difere)))
-plt.plot(ts, ys, 'r')
-plt.plot(t, yexact, 'b')
-plt.xlim(x[0], x[1])
-plt.legend(["RK de 4a ordem", "Solução Exata"], loc=2)
-plt.xlabel('x', fontsize=17)
-plt.ylabel('y', fontsize=17)
-plt.tight_layout()
-plt.show()
+def exact(x):
+    return x/(1 + np.log(x))
+ 
+# Finds value of y for a given x
+# using step size h
+# and initial value y0 at x0.
+def rungeKutta(x0, y0, x, h) :
+ 
+    # Count number of iterations
+    # using step size or
+    # step height h
+    n = int((x - x0) / h) + 1
+    t = np.linspace(x0, x, n)
+    ya = np.zeros_like(t)
+    ya[0] = y0
+
+    y = y0
+     
+    for i in range(1, n) :
+         
+        # Apply Runge Kutta Formulas
+        # to find next value of y
+        k1 = h * f(x0, y)
+        k2 = h * f(x0 + (1/2)*h, y + (1/2)*k1)
+        k3 = h * f(x0 + (1/2)*h, y + (1/2)*k2)
+        k4 = h * f(x0 + h, y + k3)
+
+        # Update next value of y
+        y = y + (1.0 / 6.0) * (k1 + 2*k2 + 2*k3 + k4)
+        ya[i] = y
+ 
+        # Update next value of x
+        x0 = x0 + h
+ 
+    return t, ya
+ 
+# Driver Code
+if __name__ == "__main__" :
+ 
+    x0 = 1
+    y = 1
+    x = 3
+    h = 0.25
+ 
+    t, P = rungeKutta(x0, y, x, h)
+    u, Q = rungeKutta(x0, y, x, 0.1)
+    v, R = rungeKutta(x0, y, x, 0.05)
+
+    y_values1 = exact(t)
+    y_values2 = exact(u)
+    y_values3 = exact(v)
+
+    errors_1 = np.abs(y_values1 - P)
+    errors_2 = np.abs(y_values2 - Q)
+    errors_3 = np.abs(y_values3 - R)
+
+    plt.plot(t, errors_1, 'red', label='h = 0.25')
+    plt.plot(u, errors_2, 'blue', label='h = 0.1')
+    plt.plot(v, errors_3, 'green', label='h = 0.05')
+
+    # plt.plot(v, y_values3, 'black', label='Analítica')
+    # plt.plot(t, P, 'r', label='h = 0.25')
+    # plt.plot(u, Q, 'b', label='h = 0.1')
+    # plt.plot(v, R, 'g', label='h = 0.05')
+
+    plt.legend()
+    plt.grid(True)
+    plt.show()

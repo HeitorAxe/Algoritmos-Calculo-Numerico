@@ -80,12 +80,14 @@ tabela2 = gerar_tabela(func2, a, b, particionamento)
 
 
 print("\nTabela de Pontos para a função 1")
-print("   x          y")
+print("|   x|          y|")
+print("| ---| -------|")
 for ponto in tabela1:
-    print(f"{ponto[0]:.4f}   {ponto[1]:.4f}")
+    print(f"|{ponto[0]:.4f} | {ponto[1]:.4f}|")
 
 
 print("\nTabela de Pontos para a função 2")
-print("   x          y")
-for ponto in tabela2:
-    print(f"{ponto[0]:.4f}   {ponto[1]:.4f}")
+print("|   x|          y|")
+print("| ---| -------|")
+for ponto in tabela2:   
+    print(f"|{ponto[0]:.4f} | {ponto[1]:.4f}|")
